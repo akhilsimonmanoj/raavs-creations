@@ -1,15 +1,23 @@
 const Product = require('../models/Product')
+const Vendor = require('../models/Vendor')
 const productController = {}
 
 productController.create = (req, res) => {
-    const body = req.body 
-    Product.findOne({name: req.name, isDelete: true})
+    const { name, description, price, quantity, vendorId} = req.body 
+    Vendor.findById(vendorId)
+    .then((vendor) => {
+        if(!vendor){
+            return res.json('Vendor not found')
+        }
+
+        return Product.findOne({name: req.name, isDelete: true})
+    })
     .then((existingProduct) => {
         if(existingProduct){
             existingProduct.isDelete = false
             return existingProduct.save()
         } else {
-            const product = new Product(body)
+            const product = new Product({name, description, price, quantity, vendorId})
             product.save()
         }
     })
@@ -20,6 +28,7 @@ productController.create = (req, res) => {
 productController.list = (req, res) => {
     Product.find({isDelete: false})
     .populate('category')
+    .populate('Vendor')
     .populate('seller')
     .populate({
         path: 'ratings',
@@ -35,6 +44,7 @@ productController.show = (req, res) => {
     const id = req.params.id
     Product.findOne({_id: id, isDelete: false})
     .populate('category')
+    .populate('Vendor')
     .populate('seller')
     .populate({
         path: 'ratings',

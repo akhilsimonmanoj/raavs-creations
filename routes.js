@@ -10,6 +10,7 @@ const paymentController = require('./controllers/paymentController')
 const orderController = require('./controllers/orderController')
 const categoryController = require('./controllers/categoryController')
 const cartController = require('./controllers/cartController')
+const vendorController = require('./controllers/vendorController')
 
 const router = express.Router()
 
@@ -28,6 +29,12 @@ router.get('/category/', categoryController.list)
 router.get('/category/:id', categoryController.show)
 router.put('/category/:id', authenticateUser , protect, categoryController.update)
 router.delete('/category/:id', authenticateUser , protect, categoryController.destroy)
+
+//Vendor Routes
+router.post('/', authenticateUser, protect, vendorController.create)
+router.get('/', authenticateUser, protect, vendorController.list)
+router.put('/:id', authenticateUser, protect, vendorController.update)
+router.delete('/:id', authenticateUser, protect, vendorController.destroy)
 
 //Product Routes
 router.post('/product/', authenticateUser , protect, productController.create)
@@ -62,6 +69,7 @@ router.get('/payment/', authenticateUser , protect, paymentController.list)
 router.get('/payment/:id', authenticateUser , paymentController.show)
 router.put('/payment/:id', authenticateUser , protect, paymentController.update)
 router.delete('/payment/:id', authenticateUser , paymentController.softDelete)
+router.post('/verify', authenticateUser, paymentController.verifyPayment)
 
 //Cart Controller
 router.post('/cart/', cartController.create)
@@ -69,5 +77,7 @@ router.get('/cart/', cartController.listItems)
 router.put('/cart/:id', cartController.update)
 router.put('/cart/remove', cartController.removeFromCart)
 router.put('/cart/clear/:id', cartController.clearCart)
+
+
 
 module.exports = router

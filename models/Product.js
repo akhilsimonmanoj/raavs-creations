@@ -10,9 +10,13 @@ const productSchema = new Schema({
         type: String,
         required: [true, 'Product description is required']
     },
-    stock: {
+    vendorId: {
+        type: Schema.Types.ObjectId,
+        ref: 'Vendor'
+    },
+    quantity: {
         type: Number,
-        required: [true, 'Strock Quantity is required']
+        required: [true, 'Stock Quantity is required']
     },
     price: {
         type: Number,

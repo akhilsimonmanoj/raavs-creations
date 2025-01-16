@@ -10,21 +10,37 @@ const paymentSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'Orders'
     },
+    vendorId: {
+        type: Schema.Types.ObjectId,
+        ref: 'Vendor'
+    },
+    razorpayOrderId: {
+        type: String,
+    },
+    razorPaySignature: {
+        type: String
+    },
+    razorpayPaymentId: {
+        type: String
+    },
     paymentMethod: {
         type: 'String',
-        enum: ['card', 'upi', 'cod'],
-        default: 'cod'
+        enum: ['card', 'upi', 'cod', 'netbanking', 'wallet', 'emi'],
     },
     paymentStatus: {
         type: String,
-        enum: ['paid', 'pending', 'failed', 'refunded'],
-        default: 'pending'
+        enum: ['created', 'paid', 'pending', 'failed', 'refunded'],
+        default: 'created'
     },
     transactionId: {
         type: String,
     },
     amount: {
         type: Number,
+    },
+    currency: {
+        type: String,
+        default: 'INR'
     },
     isDelete: {
         type: Boolean,
